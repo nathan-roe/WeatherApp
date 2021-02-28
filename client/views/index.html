@@ -6,10 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="/client/wwwroot/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/client/public/css/style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
-    <script src="/client/wwwroot/js/index.js"></script>
+    <script src="/client/public/js/index.js" type='text/javascript'></script>
     <title>Weather App</title>
 </head>
 <style type="text/css">
@@ -32,28 +32,6 @@
         display: flex;
         justify-content: center;
         align-items: center;
-    }
-    .main {
-        width: 100%;
-        height: 90vh;
-        display: flex;
-        padding-top: 8vh;
-    }
-    .left-nav {
-        margin-top: 2vh;
-        width: 20vw;
-        height: 90vh;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding-right: 1vw;
-        padding-left: 1vw;
-        text-align: center;
-    }
-    #map {
-        margin-top: 2vh;
-        height: 90vh;
-        width: 80vw;
     }
     input {
         background-color: transparent;
@@ -99,17 +77,6 @@
         top: 40vh;
         left: 40vw;
     }
-    .forecast {
-        display: flex;
-        width: 100%;
-        justify-content: space-evenly;
-    }
-    .day {
-        width: 13vw;
-        background-color: rgb(18,18,18);
-        box-shadow: 0px 0px 3px rgba(0, 0, 0, 1);
-        text-align: center;
-    }
     .day p {
         font-size: 2vh;
     }
@@ -119,9 +86,6 @@
     .day p svg {
         margin-bottom: -.5vh;
     }
-    #myChart {
-        
-    }
     .data {
         height: 100vh;
         width: 100%;
@@ -129,6 +93,102 @@
         display: flex;
         flex-direction: column;
         justify-content: flex-end;
+    }
+    .day {
+        float: left;
+        padding: 15px;
+    }
+    .forecast::after {
+        content: "";
+        clear: both;
+        display: table;
+    }
+    h2 {
+        font-size: 3.5vh;
+    }
+    p {
+        font-size: 2.5vh;
+    }
+    .main {
+        width: 100%;
+        height: 90vh;
+        display: flex;
+        padding-top: 8vh;
+    }
+    .left-nav {
+        margin-top: 2vh;
+        width: 20vw;
+        height: 90vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-right: 1vw;
+        padding-left: 1vw;
+        text-align: center;
+    }
+    .day {
+        width: 13vw;
+        background-color: rgb(18,18,18);
+        box-shadow: 0px 0px 3px rgba(0, 0, 0, 1);
+        text-align: center;
+    }
+    @media only screen and (max-width: 822px) {
+    /* For mobile phones: */
+        #map{
+            width: 100%;
+            margin-top: 2vh;
+        }
+        .forecast {
+            overflow-y: scroll;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            align-self: center;
+            padding-left: 5vw;
+            padding-right: 5vw;
+            width: 90%;
+            height: 60vh;
+            margin-top: -20vh;
+        }
+        .day {
+            width: 70%;
+            margin: 1vw;
+        }
+        div.left-nav {
+            display: none;
+        }
+        #myChart {
+            width: 100%;
+            height: 100%;
+            margin-top: 1vh;
+            margin-bottom: 1vh;
+        }
+        #chartWrapper {
+            width: 100%;
+            height: 30vh;
+        }
+    }
+    @media only screen and (min-width: 823px) {
+        /* For tablets and PCs */
+        .data {
+            justify-content: space-between;
+
+        }
+        .forecast {
+            display: flex;
+            width: 100%;
+            justify-content: space-evenly;
+            margin-top: 12vh;
+        }
+        #map {
+            margin-top: 2vh;
+            height: 90vh;
+            width: 80vw;
+        }
+        .day {
+            margin: .5vw;
+        }
     }
 </style>
 <body>
@@ -148,7 +208,7 @@
 </body>
 <script>
     $(document).ready(() => {
-        
+        //  394 h 822 w
     });
 
 function initMap() {
@@ -220,7 +280,6 @@ function initMap() {
                 });
             },
             success: res => {
-                console.log(res);
                 handleSuccess(res);
             }
         });
@@ -357,7 +416,6 @@ function initMap() {
                 $("body").append(svg);
             },
             success: res => {
-                console.log(res);
                 handleSuccess(res);
             },
             error: err => {
@@ -414,25 +472,22 @@ const alterDate = (num) => {
     let days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     let parts = date.split('/');
     let day = new Date(parts[2], parts[0] - 1, parts[1]);
-    console.log(day.toDateString());
     return {'date': date, 'day': days[day.getDay()]};
 }
 const handleSuccess = res => {
     let next7Days = [];
     var resObj = JSON.parse(res);
     $(".data") !== undefined ? $(".data").remove() : '';
+    $("#input").val(''); 
     $("body").append(`<div class="data"></div>`);
     $(document).scrollTop($(document).height());
-
     $('#load').remove();
     $(".data").append("<div class='forecast'></div>");
     for(let i=0;i<resObj.dataseries.length;i++){
-        
         next7Days.push({
             "day":alterDate(resObj.dataseries[i].date).day, 
             "avgTemp": (((resObj.dataseries[i].temp2m.max * 9/5) + 32) + ((resObj.dataseries[i].temp2m.min* 9/5) + 32))/2
         });
-
         $(".forecast").append(`
             <div class='day'>
                 <h3>${alterDate(resObj.dataseries[i].date).day}</h3>
@@ -449,8 +504,8 @@ const handleSuccess = res => {
             </div>
         `);
     }
-    $(".data").append(`<canvas id="myChart" width="100vw" height="20vh"></canvas>`);
 
+    $(".data").append(`<content id="chartWrapper"><canvas id="myChart"></canvas></content>`);
     var ctx = document.getElementById('myChart').getContext('2d');
     var myChart = new Chart(ctx, {
         type: 'line',
@@ -481,6 +536,8 @@ const handleSuccess = res => {
             }]
         },
         options: {
+            responsive: true,
+            maintainAspectRatio: false,
             legend: {
                 labels: {
                     fontColor: "white"
