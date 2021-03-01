@@ -1,3 +1,7 @@
+$(document).ready(() => {
+
+});
+
 // initialize map and make api requests on click of map/autocomplete
 function initMap() {
     let map;
@@ -186,8 +190,9 @@ function initMap() {
         else{
             $("body").append(`
                 <div id='inputError'>
-                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-emoji-neutral-fill" viewBox="0 0 16 16">
-                    <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zM7 6.5C7 7.328 6.552 8 6 8s-1-.672-1-1.5S5.448 5 6 5s1 .672 1 1.5zm-3 4a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zM10 8c-.552 0-1-.672-1-1.5S9.448 5 10 5s1 .672 1 1.5S10.552 8 10 8z"/>
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-outlet" viewBox="0 0 16 16">
+                    <path d="M3.34 2.994c.275-.338.68-.494 1.074-.494h7.172c.393 0 .798.156 1.074.494.578.708 1.84 2.534 1.84 5.006 0 2.472-1.262 4.297-1.84 5.006-.276.338-.68.494-1.074.494H4.414c-.394 0-.799-.156-1.074-.494C2.762 12.297 1.5 10.472 1.5 8c0-2.472 1.262-4.297 1.84-5.006zm1.074.506a.376.376 0 0 0-.299.126C3.599 4.259 2.5 5.863 2.5 8c0 2.137 1.099 3.74 1.615 4.374.06.073.163.126.3.126h7.17c.137 0 .24-.053.3-.126.516-.633 1.615-2.237 1.615-4.374 0-2.137-1.099-3.74-1.615-4.374a.376.376 0 0 0-.3-.126h-7.17z"/>
+                <path d="M6 5.5a.5.5 0 0 1 .5.5v1.5a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm4 0a.5.5 0 0 1 .5.5v1.5a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zM7 10v1h2v-1a1 1 0 0 0-2 0z"/>
                 </svg>
                     <p>Sorry, I don't know that one...</p>
                     <p>Try using the map!</p>
@@ -377,7 +382,7 @@ const handleSuccess = (res, civilArr) => {
     $("body").append(`<div class="data"></div>`);
     $(document).scrollTop($(document).height());
     $('#load').remove();
-    $(".data").append("<div class='forecast'></div>");
+    $(".data").append("<content id='forecastWrapper'><div class='forecast'></div></content>");
 
     // Create date/weather cards
     for(let i=0;i<resObj.dataseries.length;i++){
@@ -416,24 +421,8 @@ const handleSuccess = (res, civilArr) => {
             datasets: [{
                 label: "The Coming Week's Average Temperatures",
                 data: [...civilArr.map(val => (val.temp2m* 9/5) + 32)],
-                backgroundColor: [
-                    'rgba(23,38,60,0.7)',
-                    'rgba(23,38,60,0.7)',
-                    'rgba(23,38,60,0.7)',
-                    'rgba(23,38,60,0.7)',
-                    'rgba(23,38,60,0.7)',
-                    'rgba(23,38,60,0.7)',
-                    'rgba(23,38,60,0.7)'
-                ],
-                borderColor: [
-                    'rgba(0,0,23, 0.2)',
-                    'rgba(0,0,23, 1)',
-                    'rgba(0,0,23, 1)',
-                    'rgba(0,0,23, 1)',
-                    'rgba(0,0,23, 1)',
-                    'rgba(0,0,23, 1)',
-                    'rgba(0,0,23, 1)',
-                ],
+                backgroundColor: [...civilArr.map(val => 'rgba(108,122,149, .8)')],
+                borderColor: [...civilArr.map(val => 'rgba(0,0,23, 1)')],
                 borderWidth: 1
             }]
         },
