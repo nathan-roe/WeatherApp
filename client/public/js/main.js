@@ -1,8 +1,9 @@
 $(document).ready(() => {
-    //  394 h 822 w
+
 });
 
 function initMap() {
+    let map;
     const center = { lat: 50.064192, lng: -130.605469 };
     const defaultBounds = {
         north: center.lat + 0.1,
@@ -10,6 +11,86 @@ function initMap() {
         east: center.lng + 0.1,
         west: center.lng - 0.1,
     };
+    const styleArr = [
+        { elementType: "geometry", stylers: [{ color: "#242f3e" }] },
+        { elementType: "labels.text.stroke", stylers: [{ color: "#242f3e" }] },
+        { elementType: "labels.text.fill", stylers: [{ color: "#746855" }] },
+        {
+            featureType: "administrative.locality",
+            elementType: "labels.text.fill",
+            stylers: [{ color: "#d59563" }],
+        },
+        {
+            featureType: "poi",
+            elementType: "labels.text.fill",
+            stylers: [{ color: "#d59563" }],
+        },
+        {
+            featureType: "poi.park",
+            elementType: "geometry",
+            stylers: [{ color: "#263c3f" }],
+        },
+        {
+            featureType: "poi.park",
+            elementType: "labels.text.fill",
+            stylers: [{ color: "#6b9a76" }],
+        },
+        {
+            featureType: "road",
+            elementType: "geometry",
+            stylers: [{ color: "#38414e" }],
+        },
+        {
+            featureType: "road",
+            elementType: "geometry.stroke",
+            stylers: [{ color: "#212a37" }],
+        },
+        {
+            featureType: "road",
+            elementType: "labels.text.fill",
+            stylers: [{ color: "#9ca5b3" }],
+        },
+        {
+            featureType: "road.highway",
+            elementType: "geometry",
+            stylers: [{ color: "#746855" }],
+        },
+        {
+            featureType: "road.highway",
+            elementType: "geometry.stroke",
+            stylers: [{ color: "#1f2835" }],
+        },
+        {
+            featureType: "road.highway",
+            elementType: "labels.text.fill",
+            stylers: [{ color: "#f3d19c" }],
+        },
+        {
+            featureType: "transit",
+            elementType: "geometry",
+            stylers: [{ color: "#2f3948" }],
+        },
+        {
+            featureType: "transit.station",
+            elementType: "labels.text.fill",
+            stylers: [{ color: "#d59563" }],
+        },
+        {
+            featureType: "water",
+            elementType: "geometry",
+            stylers: [{ color: "#17263c" }],
+        },
+        {
+            featureType: "water",
+            elementType: "labels.text.fill",
+            stylers: [{ color: "#515c6d" }],
+        },
+        {
+            featureType: "water",
+            elementType: "labels.text.stroke",
+            stylers: [{ color: "#17263c" }],
+        },
+    ];
     const input = document.getElementById("input");
     const options = {
         bounds: defaultBounds,
@@ -69,97 +150,21 @@ function initMap() {
                     left: 0, 
                     behavior: 'smooth' 
                 });
+                const center = new google.maps.LatLng(place.geometry.location.lat(), place.geometry.location.lng());
+                map.panTo(center);
             },
             success: res => {
                 handleSuccess(res);
             }
         });
     });
-
     const myLatlng = { lat: -25.363, lng: 131.044 };
-    const map = new google.maps.Map(document.getElementById("map"), {
+    map = new google.maps.Map(document.getElementById("map"), {
         zoom: 4,
         center: myLatlng,
-        styles: [
-            { elementType: "geometry", stylers: [{ color: "#242f3e" }] },
-            { elementType: "labels.text.stroke", stylers: [{ color: "#242f3e" }] },
-            { elementType: "labels.text.fill", stylers: [{ color: "#746855" }] },
-            {
-                featureType: "administrative.locality",
-                elementType: "labels.text.fill",
-                stylers: [{ color: "#d59563" }],
-            },
-            {
-                featureType: "poi",
-                elementType: "labels.text.fill",
-                stylers: [{ color: "#d59563" }],
-            },
-            {
-                featureType: "poi.park",
-                elementType: "geometry",
-                stylers: [{ color: "#263c3f" }],
-            },
-            {
-                featureType: "poi.park",
-                elementType: "labels.text.fill",
-                stylers: [{ color: "#6b9a76" }],
-            },
-            {
-                featureType: "road",
-                elementType: "geometry",
-                stylers: [{ color: "#38414e" }],
-            },
-            {
-                featureType: "road",
-                elementType: "geometry.stroke",
-                stylers: [{ color: "#212a37" }],
-            },
-            {
-                featureType: "road",
-                elementType: "labels.text.fill",
-                stylers: [{ color: "#9ca5b3" }],
-            },
-            {
-                featureType: "road.highway",
-                elementType: "geometry",
-                stylers: [{ color: "#746855" }],
-            },
-            {
-                featureType: "road.highway",
-                elementType: "geometry.stroke",
-                stylers: [{ color: "#1f2835" }],
-            },
-            {
-                featureType: "road.highway",
-                elementType: "labels.text.fill",
-                stylers: [{ color: "#f3d19c" }],
-            },
-            {
-                featureType: "transit",
-                elementType: "geometry",
-                stylers: [{ color: "#2f3948" }],
-            },
-            {
-                featureType: "transit.station",
-                elementType: "labels.text.fill",
-                stylers: [{ color: "#d59563" }],
-            },
-            {
-                featureType: "water",
-                elementType: "geometry",
-                stylers: [{ color: "#17263c" }],
-            },
-            {
-                featureType: "water",
-                elementType: "labels.text.fill",
-                stylers: [{ color: "#515c6d" }],
-            },
-            {
-                featureType: "water",
-                elementType: "labels.text.stroke",
-                stylers: [{ color: "#17263c" }],
-            },
-        ]
+        styles: styleArr,
+        gestureHandling: 'greedy',
+        draggable: true
     });
     map.addListener("click", (mapsMouseEvent) => {
         let latLng = mapsMouseEvent.latLng.toJSON();
@@ -204,10 +209,41 @@ function initMap() {
                             repeatCount="indefinite" />
                     </path>
                     </svg>`;
+                // pan to clicked location
+                const center = new google.maps.LatLng(latLng['lat'], latLng['lng']);
+                map.panTo(center);
+
                 $("body").append(svg);
             },
             success: res => {
-                handleSuccess(res);
+                $.ajax({
+                    url: `http://www.7timer.info/bin/api.pl?lon=${latLng['lng']}&lat=${latLng['lat']}&product=civil&output=json`,
+                    type: 'get',
+                    success: civilRes => {
+                        // timepoint is hours ahead of init -> timepoint[i] + 3 == timepoint[i+1]
+                        let resObj = JSON.parse(civilRes);
+                        let civilArr = [];
+                        let today = new Date();
+                        let hourNow = today.getHours(); // returns 0-23
+                        let count = 0;
+                        let i = 0;
+                        // sets count to hour many timepoints are left today
+                        while(hourNow + resObj.dataseries[i].timepoint < 23){
+                            count++;
+                            i++;
+                        }
+                        for(let i=count;i<resObj.dataseries.length-1;i++){
+                            if(civilArr.length <= 55){
+                                civilArr.push(resObj.dataseries[i]);
+                            }
+                            else{
+                                break;
+                            }
+                        }
+                        // console.log(civilArr);
+                        handleSuccess(res, civilArr);
+                    }
+                });
             },
             error: err => {
                 console.log(err);
@@ -265,10 +301,12 @@ const alterDate = num => {
     let day = new Date(parts[2], parts[0] - 1, parts[1]);
     return {'date': date, 'day': days[day.getDay()]};
 }
-const handleSuccess = res => {
+const handleSuccess = (res, civilArr) => {
+    console.log(5);
+    console.log(civilArr);
     let next7Days = [];
     var resObj = JSON.parse(res);
-
+    let j = 0;
     $(".data") !== undefined ? $(".data").remove() : '';
     $("#input").val(''); 
     $("body").append(`<div class="data"></div>`);
@@ -288,7 +326,7 @@ const handleSuccess = res => {
                 <p>${alterWeather(resObj.dataseries[i].weather).name}</p>
                 <p>${((resObj.dataseries[i].temp2m.max * 9/5) + 32).toFixed(1)}°F / ${((resObj.dataseries[i].temp2m.min* 9/5) + 32).toFixed(1)}°F</p>
                 <p>
-                    wind: ${resObj.dataseries[i].wind10m_max}mph
+                    wind: ${resObj.dataseries[i].wind10m_max}mph ${civilArr[j].wind10m.direction}
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-wind" viewBox="0 0 16 16">
                         <path d="M12.5 2A2.5 2.5 0 0 0 10 4.5a.5.5 0 0 1-1 0A3.5 3.5 0 1 1 12.5 8H.5a.5.5 0 0 1 0-1h12a2.5 2.5 0 0 0 0-5zm-7 1a1 1 0 0 0-1 1 .5.5 0 0 1-1 0 2 2 0 1 1 2 2h-5a.5.5 0 0 1 0-1h5a1 1 0 0 0 0-2zM0 9.5A.5.5 0 0 1 .5 9h10.042a3 3 0 1 1-3 3 .5.5 0 0 1 1 0 2 2 0 1 0 2-2H.5a.5.5 0 0 1-.5-.5z"/>
                     </svg> 
@@ -296,6 +334,7 @@ const handleSuccess = res => {
                 <p id='dayDate'>${alterDate(resObj.dataseries[i].date).date}</p>
             </div>
         `);
+        j += 8;
     }
 
     $(".data").append(`<content id="chartWrapper"><canvas id="myChart"></canvas></content>`);
