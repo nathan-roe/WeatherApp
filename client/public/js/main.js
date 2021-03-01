@@ -353,6 +353,7 @@ const alterDate = num => {
     return {'date': date, 'day': days[day.getDay()]};
 }
 const handleSuccess = (res, civilArr) => {
+    console.log(civilArr);
     let next7Days = [];
     var resObj = JSON.parse(res);
     let j = 0;
@@ -373,7 +374,7 @@ const handleSuccess = (res, civilArr) => {
                 <h3>${alterDate(resObj.dataseries[i].date).day}</h3>
                 <span>${alterWeather(resObj.dataseries[i].weather).svg}</span>
                 <p>${alterWeather(resObj.dataseries[i].weather).name}</p>
-                <p>${((resObj.dataseries[i].temp2m.max * 9/5) + 32).toFixed(1)}°F / ${((resObj.dataseries[i].temp2m.min* 9/5) + 32).toFixed(1)}°F</p>
+                <p>${((resObj.dataseries[i].temp2m.max * 9/5) + 32).toFixed(1)}°F / ${((resObj.dataseries[i].temp2m.min * 9/5) + 32).toFixed(1)}°F</p>
                 <p>
                     wind: ${resObj.dataseries[i].wind10m_max}mph ${civilArr[j].wind10m.direction}
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-wind" viewBox="0 0 16 16">
@@ -387,14 +388,18 @@ const handleSuccess = (res, civilArr) => {
     }
 
     $(".data").append(`<content id="chartWrapper"><canvas id="myChart"></canvas></content>`);
+    $(".data").append(`<div id='chartLabels'></div>`);
+    for(let i=0;i<next7Days.length;i++){
+        $("#chartLabels").append(`<span>${next7Days[i].day}</span>`);
+    }
     var ctx = document.getElementById('myChart').getContext('2d');
     var myChart = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: [...next7Days.map(val => val.day)],
+            labels: [...civilArr.map(val => '')],
             datasets: [{
                 label: "The Coming Week's Average Temperatures",
-                data: [...next7Days.map(val => val.avgTemp)],
+                data: [...civilArr.map(val => (val.temp2m* 9/5) + 32)],
                 backgroundColor: [
                     'rgba(23,38,60,0.7)',
                     'rgba(23,38,60,0.7)',
