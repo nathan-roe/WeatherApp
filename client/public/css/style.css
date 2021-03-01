@@ -1,3 +1,4 @@
+
 * {
     font-family: 'Noto Sans KR', sans-serif;
     color: white;
@@ -7,6 +8,7 @@ html, body {
     margin: 0;
     padding: 0;
     background-color: rgb(38,38,38);
+    scroll-behavior: smooth;
 }
 header {
     z-index: 4;
@@ -21,10 +23,10 @@ header {
 input {
     background-color: transparent;
     border: none;
+    text-align: center;
     text-transform: uppercase;
     text-decoration: none;
     letter-spacing: 0.15em;
-    
     display: inline-block;
     padding: 15px 20px;
     position: relative;
@@ -32,24 +34,8 @@ input {
 input:focus {
     outline: none;
 }
-input:after {    
-    background: none repeat scroll 0 0 transparent;
-    bottom: 0;
-    content: "";
-    display: block;
-    height: 2px;
-    left: 50%;
-    position: absolute;
-    background: #fff;
-    transition: width 0.3s ease 0s, left 0.3s ease 0s;
-    width: 0;
-}
 input:hover {
     cursor: pointer;
-}
-input:hover:after { 
-    width: 100%; 
-    left: 0; 
 }
 #load {
     width: 20vw;
@@ -124,6 +110,23 @@ p {
 }
 #chartWrapper {
     margin-bottom: -20vh;
+}
+#inputError {
+    animation: fade 3s linear forwards;
+    width: 100%;
+    position: fixed;
+    top: 40vh;
+    left: 0;
+    opacity: 0.9;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+}
+@keyframes fade {
+    0%,100% { opacity: 0 }
+    20%,80% { opacity: 1 }
 }
 @media only screen and (max-width: 822px) {
 /* For mobile phones: */

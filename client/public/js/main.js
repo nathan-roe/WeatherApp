@@ -1,7 +1,4 @@
-$(document).ready(() => {
-
-});
-
+// initialize map and make api requests on click of map/autocomplete
 function initMap() {
     let map;
     const center = { lat: 50.064192, lng: -130.605469 };
@@ -100,89 +97,106 @@ function initMap() {
         strictBounds: false,
         types: ["establishment"],
     };
+    // autocomplete for input and listener
     const autocomplete = new google.maps.places.Autocomplete(input, options);
-    google.maps.event.addListener(autocomplete, 'place_changed', function () {
+    google.maps.event.addListener(autocomplete, 'place_changed', () => {
         var place = autocomplete.getPlace();
-        $.ajax({
-            url: `http://www.7timer.info/bin/api.pl?lon=${place.geometry.location.lng()}&lat=${place.geometry.location.lat()}&product=civillight&output=json`,
-            type: "get",
-            beforeSend: () => {
-                let svg = `
-                    <svg id='load' version="1.1" id="L7" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                    viewBox="0 0 100 100" enable-background="new 0 0 100 100" xml:space="preserve" height="10vh" width="10vw">
-                    <path fill="#fff" d="M31.6,3.5C5.9,13.6-6.6,42.7,3.5,68.4c10.1,25.7,39.2,38.3,64.9,28.1l-3.1-7.9c-21.3,8.4-45.4-2-53.8-23.3
-                    c-8.4-21.3,2-45.4,23.3-53.8L31.6,3.5z">
-                        <animateTransform 
-                            attributeName="transform" 
-                            attributeType="XML" 
-                            type="rotate"
-                            dur="2s" 
-                            from="0 50 50"
-                            to="360 50 50" 
-                            repeatCount="indefinite" />
-                    </path>
-                    <path fill="#fff" d="M42.3,39.6c5.7-4.3,13.9-3.1,18.1,2.7c4.3,5.7,3.1,13.9-2.7,18.1l4.1,5.5c8.8-6.5,10.6-19,4.1-27.7
-                    c-6.5-8.8-19-10.6-27.7-4.1L42.3,39.6z">
-                        <animateTransform 
-                            attributeName="transform" 
-                            attributeType="XML" 
-                            type="rotate"
-                            dur="1s" 
-                            from="0 50 50"
-                            to="-360 50 50" 
-                            repeatCount="indefinite" />
-                    </path>
-                    <path fill="#fff" d="M82,35.7C74.1,18,53.4,10.1,35.7,18S10.1,46.6,18,64.3l7.6-3.4c-6-13.5,0-29.3,13.5-35.3s29.3,0,35.3,13.5
-                    L82,35.7z">
-                        <animateTransform 
-                            attributeName="transform" 
-                            attributeType="XML" 
-                            type="rotate"
-                            dur="2s" 
-                            from="0 50 50"
-                            to="360 50 50" 
-                            repeatCount="indefinite" />
-                    </path>
-                    </svg>`;
-                $("body").append(svg);
-                window.scroll({
-                    top: 0, 
-                    left: 0, 
-                    behavior: 'smooth' 
-                });
-                const center = new google.maps.LatLng(place.geometry.location.lat(), place.geometry.location.lng());
-                map.panTo(center);
-            },
-            success: res => {
-                $.ajax({
-                    url: `http://www.7timer.info/bin/api.pl?lon=${place.geometry.location.lng()}&lat=${place.geometry.location.lat()}&product=civil&output=json`,
-                    type: 'get',
-                    success: civilRes => {
-                        // timepoint is hours ahead of init -> timepoint[i] + 3 == timepoint[i+1]
-                        let resObj = JSON.parse(civilRes);
-                        let civilArr = [];
-                        let today = new Date();
-                        let hourNow = today.getHours(); // returns 0-23
-                        let count = 0;
-                        let i = 0;
-                        // sets count to hour many timepoints are left today
-                        while(hourNow + resObj.dataseries[i].timepoint < 23){
-                            count++;
-                            i++;
-                        }
-                        for(let i=count;i<resObj.dataseries.length-1;i++){
-                            if(civilArr.length <= 55){
-                                civilArr.push(resObj.dataseries[i]);
+        if(place.geometry !== undefined){
+            $.ajax({
+                url: `http://www.7timer.info/bin/api.pl?lon=${place.geometry.location.lng()}&lat=${place.geometry.location.lat()}&product=civillight&output=json`,
+                type: "get",
+                beforeSend: () => {
+                    let svg = `
+                        <svg id='load' version="1.1" id="L7" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                        viewBox="0 0 100 100" enable-background="new 0 0 100 100" xml:space="preserve" height="10vh" width="10vw">
+                        <path fill="#fff" d="M31.6,3.5C5.9,13.6-6.6,42.7,3.5,68.4c10.1,25.7,39.2,38.3,64.9,28.1l-3.1-7.9c-21.3,8.4-45.4-2-53.8-23.3
+                        c-8.4-21.3,2-45.4,23.3-53.8L31.6,3.5z">
+                            <animateTransform 
+                                attributeName="transform" 
+                                attributeType="XML" 
+                                type="rotate"
+                                dur="2s" 
+                                from="0 50 50"
+                                to="360 50 50" 
+                                repeatCount="indefinite" />
+                        </path>
+                        <path fill="#fff" d="M42.3,39.6c5.7-4.3,13.9-3.1,18.1,2.7c4.3,5.7,3.1,13.9-2.7,18.1l4.1,5.5c8.8-6.5,10.6-19,4.1-27.7
+                        c-6.5-8.8-19-10.6-27.7-4.1L42.3,39.6z">
+                            <animateTransform 
+                                attributeName="transform" 
+                                attributeType="XML" 
+                                type="rotate"
+                                dur="1s" 
+                                from="0 50 50"
+                                to="-360 50 50" 
+                                repeatCount="indefinite" />
+                        </path>
+                        <path fill="#fff" d="M82,35.7C74.1,18,53.4,10.1,35.7,18S10.1,46.6,18,64.3l7.6-3.4c-6-13.5,0-29.3,13.5-35.3s29.3,0,35.3,13.5
+                        L82,35.7z">
+                            <animateTransform 
+                                attributeName="transform" 
+                                attributeType="XML" 
+                                type="rotate"
+                                dur="2s" 
+                                from="0 50 50"
+                                to="360 50 50" 
+                                repeatCount="indefinite" />
+                        </path>
+                        </svg>`;
+                    $("body").append(svg);
+                    window.scroll({
+                        top: 0, 
+                        left: 0, 
+                        behavior: 'smooth' 
+                    });
+                    const center = new google.maps.LatLng(place.geometry.location.lat(), place.geometry.location.lng());
+                    map.panTo(center);
+                },
+                success: res => {
+                    $.ajax({
+                        url: `http://www.7timer.info/bin/api.pl?lon=${place.geometry.location.lng()}&lat=${place.geometry.location.lat()}&product=civil&output=json`,
+                        type: 'get',
+                        success: civilRes => {
+                            // timepoint is hours ahead of init -> timepoint[i] + 3 == timepoint[i+1]
+                            let resObj = JSON.parse(civilRes);
+                            let civilArr = [];
+                            let today = new Date();
+                            let hourNow = today.getHours(); // returns 0-23
+                            let count = 0;
+                            let i = 0;
+                            // sets count to however many timepoints are left today
+                            while(hourNow + resObj.dataseries[i].timepoint < 23){
+                                count++;
+                                i++;
                             }
-                            else{
-                                break;
+                            for(let i=count;i<resObj.dataseries.length-1;i++){
+                                if(civilArr.length <= 55){
+                                    civilArr.push(resObj.dataseries[i]);
+                                }
+                                else{
+                                    break;
+                                }
                             }
+                            handleSuccess(res, civilArr);
                         }
-                        handleSuccess(res, civilArr);
-                    }
-                });
-            }
-        });
+                    });
+                }
+            });
+        }
+        else{
+            $("body").append(`
+                <div id='inputError'>
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-emoji-neutral-fill" viewBox="0 0 16 16">
+                    <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zM7 6.5C7 7.328 6.552 8 6 8s-1-.672-1-1.5S5.448 5 6 5s1 .672 1 1.5zm-3 4a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zM10 8c-.552 0-1-.672-1-1.5S9.448 5 10 5s1 .672 1 1.5S10.552 8 10 8z"/>
+                </svg>
+                    <p>Sorry, I don't know that one...</p>
+                    <p>Try using the map!</p>
+                </div>
+            `);
+            setTimeout(function(){
+                $('#inputError').remove();
+            }, 3000);
+        }
     });
     const myLatlng = { lat: -25.363, lng: 131.044 };
     map = new google.maps.Map(document.getElementById("map"), {
@@ -192,6 +206,7 @@ function initMap() {
         gestureHandling: 'greedy',
         draggable: true
     });
+    // event listener for map click
     map.addListener("click", (mapsMouseEvent) => {
         let latLng = mapsMouseEvent.latLng.toJSON();
         $.ajax({
@@ -253,7 +268,7 @@ function initMap() {
                         let hourNow = today.getHours(); // returns 0-23
                         let count = 0;
                         let i = 0;
-                        // sets count to hour many timepoints are left today
+                        // sets count to however many timepoints are left today
                         while(hourNow + resObj.dataseries[i].timepoint < 23){
                             count++;
                             i++;
@@ -269,13 +284,11 @@ function initMap() {
                         handleSuccess(res, civilArr);
                     }
                 });
-            },
-            error: err => {
-                console.log(err);
-            },
+            }
         });
     });
 }
+// given the weather str from api return object with svg and full name
 const alterWeather = str => {
     switch(str){
         case 'clear':
@@ -341,8 +354,8 @@ const alterWeather = str => {
             break;
     }
 }
+// change date format from input type: 20210327 to 03/27/2021
 const alterDate = num => {
-    // input type: 20210327
     let arr = num.toString().split("");
     arr.splice(6, 0, '/');
     arr.splice(arr.length, 0, '/');
@@ -352,11 +365,13 @@ const alterDate = num => {
     let day = new Date(parts[2], parts[0] - 1, parts[1]);
     return {'date': date, 'day': days[day.getDay()]};
 }
+// append second part of page and display api information (civil & civillight)
 const handleSuccess = (res, civilArr) => {
-    console.log(civilArr);
     let next7Days = [];
     var resObj = JSON.parse(res);
     let j = 0;
+
+    // append new page and remove input value and load svg
     $(".data") !== undefined ? $(".data").remove() : '';
     $("#input").val(''); 
     $("body").append(`<div class="data"></div>`);
@@ -364,6 +379,7 @@ const handleSuccess = (res, civilArr) => {
     $('#load').remove();
     $(".data").append("<div class='forecast'></div>");
 
+    // Create date/weather cards
     for(let i=0;i<resObj.dataseries.length;i++){
         next7Days.push({
             "day":alterDate(resObj.dataseries[i].date).day, 
@@ -386,7 +402,7 @@ const handleSuccess = (res, civilArr) => {
         `);
         j += 8;
     }
-
+    // Create graph based on civil api data
     $(".data").append(`<content id="chartWrapper"><canvas id="myChart"></canvas></content>`);
     $(".data").append(`<div id='chartLabels'></div>`);
     for(let i=0;i<next7Days.length;i++){
