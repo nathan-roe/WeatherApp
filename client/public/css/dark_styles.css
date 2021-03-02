@@ -3,11 +3,29 @@
     color: white;
 }
 html, body {
-    height: 100%;
+    height: auto;
+    min-height: fit-content;
     margin: 0;
     padding: 0;
-    background-color: rgb(38,38,38);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-image: linear-gradient(rgb(0,16,64), rgb(249,208,182));
     scroll-behavior: smooth;
+}
+.particleWrapper {
+    width: 100%;
+    height: 100%;
+    max-height: fit-content;
+    z-index: 0;
+    visibility: visible;
+}
+.tsparticles-canvas-el {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
 }
 header {
     z-index: 4;
@@ -60,6 +78,7 @@ input:hover {
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
+    z-index: 1;
 }
 .day {
     width: 13vw;
@@ -91,7 +110,7 @@ input:hover {
     background-color: rgb(18,18,18);
     border: 1vh solid rgb(18,18,18);
     border-radius: 50%;
-    fill: rgb(213,149,99);
+    fill: rgb(243,203,179);
 }
 .day p {
     font-size: 2vh;
@@ -121,6 +140,7 @@ p {
     height: 90vh;
     display: flex;
     padding-top: 8vh;
+    z-index: 1;
 }
 .left-nav {
     margin-top: 10vh;
@@ -128,6 +148,7 @@ p {
     margin-right: 2vw;
     width: 16vw;
     height: 60vh;
+    min-height: fit-content;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -137,6 +158,9 @@ p {
     background-color: rgb(50, 53, 58);
     border-radius: 1vw;;
     box-shadow: 0px 0px 5px rgb(34, 33, 33);
+}
+.left-nav h2 {
+    font-size: 3vh;
 }
 .left-nav p {
     font-size: 2vh;

@@ -1,7 +1,7 @@
 {
-  "name": "WeatherApp",
+  "name": "client",
   "version": "1.0.0",
-  "description": "A UI for a weather api for Gorilla Mind",
+  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -10,9 +10,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1",
-    "particlesjs": "^2.2.3",
-    "serve-favicon": "^2.5.0",
-    "tsparticles": "^1.19.1"
+    "particlesjs": "^2.2.3"
   }
 }
