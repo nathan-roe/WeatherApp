@@ -1,9 +1,105 @@
 $(document).ready(() => {
+    $("header").on("click", "#toggleOn", () => {
+        $("#cssLink").attr("href", "css/light_styles.css");
+        $("#toggleOn").replaceWith(`<svg id='toggleOff' xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-toggle-off" viewBox="0 0 16 16">
+            <path d="M11 4a4 4 0 0 1 0 8H8a4.992 4.992 0 0 0 2-4 4.992 4.992 0 0 0-2-4h3zm-6 8a4 4 0 1 1 0-8 4 4 0 0 1 0 8zM0 8a5 5 0 0 0 5 5h6a5 5 0 0 0 0-10H5a5 5 0 0 0-5 5z"/>
+        </svg>`);
 
+        initMap();
+    });
+    $("header").on("click", "#toggleOff", () => {
+        $("#cssLink").attr("href", "css/dark_styles.css");
+        $("#toggleOff").replaceWith(`<svg id='toggleOn' xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-toggle-on" viewBox="0 0 16 16">
+            <path d="M5 3a5 5 0 0 0 0 10h6a5 5 0 0 0 0-10H5zm6 9a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/>
+        </svg>`);
+        let styleArr = [
+            { elementType: "geometry", stylers: [{ color: "#242f3e" }] },
+            { elementType: "labels.text.stroke", stylers: [{ color: "#242f3e" }] },
+            { elementType: "labels.text.fill", stylers: [{ color: "#746855" }] },
+            {
+                featureType: "administrative.locality",
+                elementType: "labels.text.fill",
+                stylers: [{ color: "#d59563" }],
+            },
+            {
+                featureType: "poi",
+                elementType: "labels.text.fill",
+                stylers: [{ color: "#d59563" }],
+            },
+            {
+                featureType: "poi.park",
+                elementType: "geometry",
+                stylers: [{ color: "#263c3f" }],
+            },
+            {
+                featureType: "poi.park",
+                elementType: "labels.text.fill",
+                stylers: [{ color: "#6b9a76" }],
+            },
+            {
+                featureType: "road",
+                elementType: "geometry",
+                stylers: [{ color: "#38414e" }],
+            },
+            {
+                featureType: "road",
+                elementType: "geometry.stroke",
+                stylers: [{ color: "#212a37" }],
+            },
+            {
+                featureType: "road",
+                elementType: "labels.text.fill",
+                stylers: [{ color: "#9ca5b3" }],
+            },
+            {
+                featureType: "road.highway",
+                elementType: "geometry",
+                stylers: [{ color: "#746855" }],
+            },
+            {
+                featureType: "road.highway",
+                elementType: "geometry.stroke",
+                stylers: [{ color: "#1f2835" }],
+            },
+            {
+                featureType: "road.highway",
+                elementType: "labels.text.fill",
+                stylers: [{ color: "#f3d19c" }],
+            },
+            {
+                featureType: "transit",
+                elementType: "geometry",
+                stylers: [{ color: "#2f3948" }],
+            },
+            {
+                featureType: "transit.station",
+                elementType: "labels.text.fill",
+                stylers: [{ color: "#d59563" }],
+            },
+            {
+                featureType: "water",
+                elementType: "geometry",
+                stylers: [{ color: "#17263c" }],
+            },
+            {
+                featureType: "water",
+                elementType: "labels.text.fill",
+                stylers: [{ color: "#515c6d" }],
+            },
+            {
+                featureType: "water",
+                elementType: "labels.text.stroke",
+                stylers: [{ color: "#17263c" }],
+            },
+        ];
+        let graphColor = {"border": 'rgb(213,149,99)',"background":'rgba(64,78,103, 1)'}
+        initMap(styleArr, graphColor);
+    });
 });
 
 // initialize map and make api requests on click of map/autocomplete
-function initMap() {
+function initMap(styles=[], graphColor={"border":'rgb(255,198,145)', "background":'rgb(120,169,204)'}) {
+    $(".data") != undefined ? $(".data").remove() : ''; 
     let map;
     const center = { lat: 50.064192, lng: -130.605469 };
     const defaultBounds = {
@@ -12,86 +108,8 @@ function initMap() {
         east: center.lng + 0.1,
         west: center.lng - 0.1,
     };
-    const styleArr = [
-        { elementType: "geometry", stylers: [{ color: "#242f3e" }] },
-        { elementType: "labels.text.stroke", stylers: [{ color: "#242f3e" }] },
-        { elementType: "labels.text.fill", stylers: [{ color: "#746855" }] },
-        {
-            featureType: "administrative.locality",
-            elementType: "labels.text.fill",
-            stylers: [{ color: "#d59563" }],
-        },
-        {
-            featureType: "poi",
-            elementType: "labels.text.fill",
-            stylers: [{ color: "#d59563" }],
-        },
-        {
-            featureType: "poi.park",
-            elementType: "geometry",
-            stylers: [{ color: "#263c3f" }],
-        },
-        {
-            featureType: "poi.park",
-            elementType: "labels.text.fill",
-            stylers: [{ color: "#6b9a76" }],
-        },
-        {
-            featureType: "road",
-            elementType: "geometry",
-            stylers: [{ color: "#38414e" }],
-        },
-        {
-            featureType: "road",
-            elementType: "geometry.stroke",
-            stylers: [{ color: "#212a37" }],
-        },
-        {
-            featureType: "road",
-            elementType: "labels.text.fill",
-            stylers: [{ color: "#9ca5b3" }],
-        },
-        {
-            featureType: "road.highway",
-            elementType: "geometry",
-            stylers: [{ color: "#746855" }],
-        },
-        {
-            featureType: "road.highway",
-            elementType: "geometry.stroke",
-            stylers: [{ color: "#1f2835" }],
-        },
-        {
-            featureType: "road.highway",
-            elementType: "labels.text.fill",
-            stylers: [{ color: "#f3d19c" }],
-        },
-        {
-            featureType: "transit",
-            elementType: "geometry",
-            stylers: [{ color: "#2f3948" }],
-        },
-        {
-            featureType: "transit.station",
-            elementType: "labels.text.fill",
-            stylers: [{ color: "#d59563" }],
-        },
-        {
-            featureType: "water",
-            elementType: "geometry",
-            stylers: [{ color: "#17263c" }],
-        },
-        {
-            featureType: "water",
-            elementType: "labels.text.fill",
-            stylers: [{ color: "#515c6d" }],
-        },
-        {
-            featureType: "water",
-            elementType: "labels.text.stroke",
-            stylers: [{ color: "#17263c" }],
-        },
-    ];
+    const styleArr = styles
+        
     const input = document.getElementById("input");
     const options = {
         bounds: defaultBounds,
@@ -181,7 +199,7 @@ function initMap() {
                                     break;
                                 }
                             }
-                            handleSuccess(res, civilArr);
+                            handleSuccess(res, civilArr, graphColor);
                         }
                     });
                 }
@@ -286,7 +304,7 @@ function initMap() {
                                 break;
                             }
                         }
-                        handleSuccess(res, civilArr);
+                        handleSuccess(res, civilArr, graphColor);
                     }
                 });
             }
@@ -371,7 +389,7 @@ const alterDate = num => {
     return {'date': date, 'day': days[day.getDay()]};
 }
 // append second part of page and display api information (civil & civillight)
-const handleSuccess = (res, civilArr) => {
+const handleSuccess = (res, civilArr, graphColor) => {
     let next7Days = [];
     var resObj = JSON.parse(res);
     let j = 0;
@@ -392,17 +410,21 @@ const handleSuccess = (res, civilArr) => {
         });
         $(".forecast").append(`
             <div class='day'>
-                <h3>${alterDate(resObj.dataseries[i].date).day}</h3>
-                <span>${alterWeather(resObj.dataseries[i].weather).svg}</span>
-                <p>${alterWeather(resObj.dataseries[i].weather).name}</p>
-                <p>${((resObj.dataseries[i].temp2m.max * 9/5) + 32).toFixed(1)}°F / ${((resObj.dataseries[i].temp2m.min * 9/5) + 32).toFixed(1)}°F</p>
-                <p>
-                    wind: ${resObj.dataseries[i].wind10m_max}mph ${civilArr[j].wind10m.direction}
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-wind" viewBox="0 0 16 16">
-                        <path d="M12.5 2A2.5 2.5 0 0 0 10 4.5a.5.5 0 0 1-1 0A3.5 3.5 0 1 1 12.5 8H.5a.5.5 0 0 1 0-1h12a2.5 2.5 0 0 0 0-5zm-7 1a1 1 0 0 0-1 1 .5.5 0 0 1-1 0 2 2 0 1 1 2 2h-5a.5.5 0 0 1 0-1h5a1 1 0 0 0 0-2zM0 9.5A.5.5 0 0 1 .5 9h10.042a3 3 0 1 1-3 3 .5.5 0 0 1 1 0 2 2 0 1 0 2-2H.5a.5.5 0 0 1-.5-.5z"/>
-                    </svg> 
-                </p>
-                <p id='dayDate'>${alterDate(resObj.dataseries[i].date).date}</p>
+                <div id='dayHeader'>
+                    <h3>${alterDate(resObj.dataseries[i].date).day}</h3>
+                    <span>${alterWeather(resObj.dataseries[i].weather).svg}</span>
+                </div>
+                <div id='dayMain'>
+                    <p>${alterWeather(resObj.dataseries[i].weather).name}</p>
+                    <p>${((resObj.dataseries[i].temp2m.max * 9/5) + 32).toFixed(1)}°F / ${((resObj.dataseries[i].temp2m.min * 9/5) + 32).toFixed(1)}°F</p>
+                    <p>
+                        wind: ${resObj.dataseries[i].wind10m_max}mph ${civilArr[j].wind10m.direction}
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-wind" viewBox="0 0 16 16">
+                            <path d="M12.5 2A2.5 2.5 0 0 0 10 4.5a.5.5 0 0 1-1 0A3.5 3.5 0 1 1 12.5 8H.5a.5.5 0 0 1 0-1h12a2.5 2.5 0 0 0 0-5zm-7 1a1 1 0 0 0-1 1 .5.5 0 0 1-1 0 2 2 0 1 1 2 2h-5a.5.5 0 0 1 0-1h5a1 1 0 0 0 0-2zM0 9.5A.5.5 0 0 1 .5 9h10.042a3 3 0 1 1-3 3 .5.5 0 0 1 1 0 2 2 0 1 0 2-2H.5a.5.5 0 0 1-.5-.5z"/>
+                        </svg> 
+                    </p>
+                    <p id='dayDate'>${alterDate(resObj.dataseries[i].date).date}</p>
+                </div>
             </div>
         `);
         j += 8;
@@ -421,9 +443,9 @@ const handleSuccess = (res, civilArr) => {
             datasets: [{
                 label: "The Coming Week's Average Temperatures",
                 data: [...civilArr.map(val => (val.temp2m* 9/5) + 32)],
-                backgroundColor: [...civilArr.map(val => 'rgba(108,122,149, .8)')],
-                borderColor: [...civilArr.map(val => 'rgba(0,0,23, 1)')],
-                borderWidth: 1
+                backgroundColor: [...civilArr.map(val => graphColor.background)],
+                borderColor: [...civilArr.map(val => graphColor.border)],
+                borderWidth: 2
             }]
         },
         options: {
