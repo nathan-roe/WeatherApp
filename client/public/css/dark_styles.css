@@ -91,6 +91,10 @@ input:focus {
 input:hover {
     cursor: pointer;
 }
+.pac-item * {
+    color: black;
+}
+
 #load {
     width: 20vw;
     height: 20vh;
