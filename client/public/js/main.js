@@ -183,6 +183,8 @@ function initMap(styles=[], graphColor={"border":'rgb(255,198,145)', "background
     google.maps.event.addListener(autocomplete, 'place_changed', () => {
         var place = autocomplete.getPlace();
         if(place.geometry !== undefined){
+            $("#address") != undefined ? $("#address").remove() : '';
+            $("header").prepend(`<span id='addressWrapper'><h2 id='address'>${$("input").val()}</h2></span>`);
             $.ajax({
                 url: `http://www.7timer.info/bin/api.pl?lon=${place.geometry.location.lng()}&lat=${place.geometry.location.lat()}&product=civillight&output=json`,
                 type: "get",
@@ -265,6 +267,7 @@ function initMap(styles=[], graphColor={"border":'rgb(255,198,145)', "background
             });
         }
         else{
+            $("#address") != undefined ? $("#address").remove() : ''
             $("body").append(`
                 <div id='inputError'>
                 <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-outlet" viewBox="0 0 16 16">
@@ -291,6 +294,21 @@ function initMap(styles=[], graphColor={"border":'rgb(255,198,145)', "background
     // event listener for map click
     map.addListener("click", (mapsMouseEvent) => {
         let latLng = mapsMouseEvent.latLng.toJSON();
+        $.ajax({
+            url: `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latLng['lat']},${latLng['lng']}&key=AIzaSyACnNLB8jnPQN60eyqrr5fF39gmNIijpu8`,
+            type: 'get',
+            success: res => {
+                console.log(res);
+                console.log(res.results[0].formatted_address);
+                if(res.results[0].formatted_address !== undefined){
+                    $("#address") != undefined ? $("#address").remove() : ''
+                    $("header").prepend(`<span id='addressWrapper'><h2 id='address'>${res.results[0].formatted_address}</h2></span>`);
+                }
+            },
+            error: err=> {
+                console.log(err);
+            }
+        })
         $.ajax({
             url: `http://www.7timer.info/bin/api.pl?lon=${latLng['lng']}&lat=${latLng['lat']}&product=civillight&output=json`,
             type: "get",
