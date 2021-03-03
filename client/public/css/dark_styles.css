@@ -5,6 +5,7 @@
 html, body {
     height: auto;
     min-height: fit-content;
+    max-height: fit-content;
     margin: 0;
     padding: 0;
     background-repeat: no-repeat;
@@ -232,6 +233,9 @@ p {
 }
 @media only screen and (max-width: 822px) {
 /* For mobile phones: */
+    #addressWrapper {
+        display: none;
+    }
     #map{
         width: 100%;
         margin-top: 2vh;
@@ -276,9 +280,9 @@ p {
         display: none;
     }
 }
-@media only screen and (max-width: 970px) and (min-width: 822px ) {
+@media only screen and (max-width: 1120px) and (min-width: 1080px ) {
     #chartLabels {
-        /* margin-top: -15vh; */
+        /* margin-top: .5vh; */
     }
 }
 @media only screen and (min-width: 970px) {

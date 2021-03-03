@@ -298,9 +298,9 @@ function initMap(styles=[], graphColor={"border":'rgb(255,198,145)', "background
             url: `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latLng['lat']},${latLng['lng']}&key=AIzaSyACnNLB8jnPQN60eyqrr5fF39gmNIijpu8`,
             type: 'get',
             success: res => {
-                console.log(res);
-                console.log(res.results[0].formatted_address);
-                if(res.results[0].formatted_address !== undefined){
+                // console.log(res);
+                // console.log(res.results[0].formatted_address);
+                if(res.results[0] !== undefined){
                     $("#address") != undefined ? $("#address").remove() : ''
                     $("header").prepend(`<span id='addressWrapper'><h2 id='address'>${res.results[0].formatted_address}</h2></span>`);
                 }

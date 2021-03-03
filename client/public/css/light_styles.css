@@ -2,24 +2,6 @@
     font-family: 'Noto Sans KR', sans-serif;
     color: black;
 }
-.particleWrapper {
-    width: 100%;
-    height: 100%;
-    max-height: fit-content;
-    z-index: 0;
-    visibility: hidden;
-}
-.tsparticles-canvas-el {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 0;
-}
-.weatherWrapper {
-    visibility: hidden;
-}
 html, body {
     height: auto;
     min-height: fit-content;
@@ -29,6 +11,8 @@ html, body {
     background-attachment: fixed;
     background: radial-gradient(rgb(6,72,254), rgb(169,232,252));
     scroll-behavior: smooth;
+    max-height: fit-content;
+
 }
 header {
     z-index: 4;
@@ -207,12 +191,33 @@ p {
     justify-content: center;
     backdrop-filter: blur(4px);
 }
+.particleWrapper {
+    width: 100%;
+    height: 100%;
+    max-height: fit-content;
+    z-index: 0;
+    visibility: hidden;
+}
+.tsparticles-canvas-el {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+.weatherWrapper {
+    visibility: hidden;
+}
 @keyframes fade {
     0%,100% { opacity: 0 }
     20%,80% { opacity: 1 }
 }
 @media only screen and (max-width: 822px) {
 /* For mobile phones: */
+    #addressWrapper {
+        display: none;
+    }
     #map{
         width: 100%;
         margin-top: 2vh;
@@ -260,7 +265,7 @@ p {
 }
 @media only screen and (max-width: 970px) and (min-width: 822px ) {
     #chartLabels {
-        margin-top: 5vh;
+        margin-top: 10vh;
     }
 }
 @media only screen and (min-width: 970px) {
