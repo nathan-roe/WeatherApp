@@ -17,8 +17,8 @@
     height: 100%;
     z-index: 0;
 }
-#tsparticles {
-    /* display: none; */
+.weatherWrapper {
+    visibility: hidden;
 }
 html, body {
     height: auto;
@@ -247,12 +247,12 @@ p {
 }
 @media only screen and (max-width: 970px) and (min-width: 822px ) {
     #chartLabels {
-        margin-top: -5vh;
+        margin-top: 5vh;
     }
 }
 @media only screen and (min-width: 970px) {
     #chartLabels {
-        margin-top: 2vh;
+        margin-top: 5vh;
     }
 }
 @media only screen and (min-width: 823px) {

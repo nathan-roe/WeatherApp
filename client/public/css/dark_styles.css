@@ -19,13 +19,27 @@ html, body {
     z-index: 0;
     visibility: visible;
 }
-.tsparticles-canvas-el {
+.particleWrapper .tsparticles-canvas-el {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     z-index: 0;
+}
+.weatherWrapper {
+    width: 100%;
+    /* height: 100%; */
+    z-index: 0;
+    visibility: visible;
+    pointer-events: none; 
+}
+#weather .tsparticles-canvas-el {
+    position: absolute;
+    top: 100vh;
+    left: 0;
+    width: 100%;
+    height: 100%;
 }
 header {
     z-index: 4;
@@ -71,6 +85,13 @@ input:hover {
     top: 40vh;
     left: 40vw;
 }
+.main {
+    width: 100%;
+    height: 90vh;
+    display: flex;
+    padding-top: 8vh;
+    z-index: 1;
+}
 .data {
     height: 100vh;
     width: 100%;
@@ -86,6 +107,7 @@ input:hover {
     box-shadow: 0px 0px 3px rgba(0, 0, 0, 1);
     text-align: center;
     float: left;
+    z-index: 1;
 }
 #dayMain {
     padding-left: 15px;
@@ -128,19 +150,13 @@ input:hover {
 }
 .forecast {
     overflow-x: hidden;
+    z-index: 1;
 }
 h2 {
     font-size: 3.5vh;
 }
 p {
     font-size: 2.5vh;
-}
-.main {
-    width: 100%;
-    height: 90vh;
-    display: flex;
-    padding-top: 8vh;
-    z-index: 1;
 }
 .left-nav {
     margin-top: 10vh;
@@ -169,13 +185,15 @@ p {
     width: 100%;
     display: flex;
     justify-content: space-evenly;
+    margin-top: -25vh;
     margin-bottom: 2vh;
 }
 #chartLabels span {
     font-size: 2vh;
+    z-index: 1;
 }
 #chartWrapper {
-    margin-bottom: -20vh;
+    z-index: 1;
 }
 #inputError {
     animation: fade 3s linear forwards;
@@ -190,6 +208,7 @@ p {
     justify-content: center;
     backdrop-filter: blur(4px);
 }
+
 @keyframes fade {
     0%,100% { opacity: 0 }
     20%,80% { opacity: 1 }
@@ -235,7 +254,6 @@ p {
     #chartWrapper {
         width: 100%;
         height: 30vh;
-        margin-bottom: -5vh;
     }
     #chartLabels {
         display: none;
@@ -243,12 +261,12 @@ p {
 }
 @media only screen and (max-width: 970px) and (min-width: 822px ) {
     #chartLabels {
-        margin-top: -5vh;
+        /* margin-top: -15vh; */
     }
 }
 @media only screen and (min-width: 970px) {
     #chartLabels {
-        margin-top: 2vh;
+        /* margin-top: -15vh; */
     }
 }
 @media only screen and (min-width: 823px) {
